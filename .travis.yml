@@ -2,11 +2,15 @@ language: go
 cache:
   directories:
     - ${GOPATH}/src/github.com/${TRAVIS_REPO_SLUG}/vendor
+    - ${GOPATH}/src/github.com/golang
+    - ${GOPATH}/src/github.com/mattn
+    - ${GOPATH}/src/golang.org/x
+    - ${GOPATH}/src/honnef.co
 go:
   - tip
   - "1.10"
   - "1.9"
 sudo: false
-
 script:
+  - dep ensure
   - make ci

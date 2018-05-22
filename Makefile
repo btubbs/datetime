@@ -1,9 +1,9 @@
-.PHONY: tests viewcoverage check dep ci
+.PHONY: tests viewcoverage check dep ci all vet
 
 GOLIST=$(shell go list ./...)
 GOBIN ?= $(GOPATH)/bin
 
-all: tests check
+all: tests check vet
 
 dep: $(GOBIN)/dep
 	$(GOBIN)/dep ensure
