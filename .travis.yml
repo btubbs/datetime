@@ -1,0 +1,12 @@
+language: go
+cache:
+  directories:
+    - ${GOPATH}/src/github.com/${TRAVIS_REPO_SLUG}/vendor
+go:
+  - tip
+  - "1.10"
+  - "1.9"
+sudo: false
+
+script:
+  - make ci
