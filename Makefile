@@ -9,6 +9,7 @@ dep: $(GOBIN)/dep
 	$(GOBIN)/dep ensure
 
 tests: dep
+	go get -v -u github.com/stretchr/testify/assert
 	go test .
 
 profile.cov:
