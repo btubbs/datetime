@@ -112,7 +112,7 @@ func TestValidFormats(t *testing.T) {
 	}
 
 	for _, tc := range tt {
-		when, err := Parse(tc.input)
+		when, err := ParseTime(tc.input)
 		assert.Equal(t, tc.output, when, tc.input)
 		assert.Nil(t, err, tc.input)
 	}
@@ -226,7 +226,7 @@ func TestErrors(t *testing.T) {
 	}
 
 	for _, tc := range tt {
-		when, err := Parse(tc.input)
+		when, err := ParseTime(tc.input)
 		assert.Equal(t, zeroTime, when, tc.input)
 		assert.Equal(t, errors.New(tc.err), err, tc.input)
 	}
