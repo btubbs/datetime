@@ -12,5 +12,4 @@ go:
   - "1.9"
 sudo: false
 script:
-  - dep ensure
   - make ci

@@ -32,5 +32,5 @@ $(GOBIN)/goveralls:
 $(GOBIN)/dep:
 	go get -v -u github.com/golang/dep/cmd/dep
 
-ci: profile.cov vet check $(GOBIN)/goveralls
+ci: profile.cov vet check dep $(GOBIN)/goveralls
 	$(GOBIN)/goveralls -coverprofile=$< -service=travis-ci
