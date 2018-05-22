@@ -1,38 +1,6 @@
-.PHONY: tests viewcoverage check dep ci all vet
+.PHONY: tests
 
-GOLIST=$(shell go list ./...)
-GOBIN ?= $(GOPATH)/bin
+all: tests
 
-all: tests check vet
-
-dep: $(GOBIN)/dep
-	$(GOBIN)/dep ensure
-
-tests: dep
-	go get -v -u github.com/stretchr/testify/assert
+tests:
 	go test .
-
-profile.cov:
-	go test -coverprofile=$@
-
-viewcoverage: profile.cov 
-	go tool cover -html=$<
-
-vet:
-	go vet $(GOLIST)
-
-check: $(GOBIN)/megacheck
-	$(GOBIN)/megacheck $(GOLIST)
-
-$(GOBIN)/megacheck:
-	go get -v -u honnef.co/go/tools/cmd/megacheck
-
-$(GOBIN)/goveralls:
-	go get -v -u github.com/mattn/goveralls
-
-$(GOBIN)/dep:
-	go get -v -u github.com/golang/dep/cmd/dep
-
-ci: profile.cov vet check dep $(GOBIN)/goveralls
-	go get -v -u github.com/stretchr/testify/assert
-	$(GOBIN)/goveralls -coverprofile=$< -service=travis-ci
