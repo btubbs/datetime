@@ -18,7 +18,7 @@ import (
 )
 
 func main() {
-	// just a year, defaulting to time.UTC timezone
+	// just a year, defaulting to the time.UTC timezone
 	fmt.Println(datetime.Parse("2007", time.UTC)) // 2007-01-01 00:00:00 +0000 UTC <nil>
 
 	// a year and a month, this time defaulting to time.Local timezone
