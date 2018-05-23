@@ -1,6 +1,6 @@
 # datetime [![Build Status](https://travis-ci.org/btubbs/datetime.svg?branch=master)](https://travis-ci.org/btubbs/datetime) [![Coverage Status](https://coveralls.io/repos/github/btubbs/datetime/badge.svg?branch=master)](https://coveralls.io/github/btubbs/datetime?branch=master)
 
-`datetime` provides a ParseUTC function for turning commonly-used 
+`datetime` provides a Parse function for turning commonly-used 
 [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) date/time formats into
 Golang time.Time variables. 
 
@@ -47,5 +47,5 @@ func main() {
 }
 ```
 
-A `DateTime` type is also provided, which implements Scan, Value, and UnmarshalJSON methods for easy
-de/serialization of ISO 8601 timestamps with external systems.
+`DefaultUTC` and `DefaultLocal` types are also provided.  Used as struct fields, their Scan, Value,
+and UnmarshalJSON methods support easy parsing of ISO 8601 timestamps from external systems.
