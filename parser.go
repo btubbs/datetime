@@ -46,8 +46,8 @@ func (p *parser) scan() (tok token, lit string) {
 // unscan pushes the previously read token back onto the buffer.
 func (p *parser) unscan() { p.buf.n = 1 }
 
-func (p *parser) parse() (time.Time, error) {
-	location := time.Local
+func (p *parser) parse(defaultLocation *time.Location) (time.Time, error) {
+	location := defaultLocation
 	year, month, day, err := p.parseDate()
 	if err != nil {
 		return zeroTime, err
