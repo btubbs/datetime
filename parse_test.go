@@ -241,3 +241,10 @@ func TestParseInt(t *testing.T) {
 func TestRound(t *testing.T) {
 	assert.Equal(t, 1.0, round(0.9))
 }
+
+func TestParseUTC(t *testing.T) {
+	// just one test case, since this is just a wrapper
+	ts, err := ParseUTC("2007")
+	assert.Equal(t, time.Date(2007, time.January, 1, 0, 0, 0, 0, time.UTC), ts)
+	assert.Nil(t, err)
+}

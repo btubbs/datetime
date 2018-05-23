@@ -65,7 +65,7 @@ func (p *parser) parse(defaultLocation *time.Location) (time.Time, error) {
 		}
 	}
 
-	location, err = p.parseLocation()
+	location, err = p.parseLocation(location)
 	if err != nil {
 		return zeroTime, err
 	}
@@ -78,11 +78,11 @@ func (p *parser) parse(defaultLocation *time.Location) (time.Time, error) {
 	return buildTime(year, month, day, hour, min, sec, nsec, location)
 }
 
-func (p *parser) parseLocation() (*time.Location, error) {
+func (p *parser) parseLocation(defaultLocation *time.Location) (*time.Location, error) {
 	var sign, secs int
 	var name string
 	if tok, lit := p.scan(); tok == EOF {
-		return time.Local, nil
+		return defaultLocation, nil
 	} else if tok == Z {
 		return time.UTC, nil
 	} else if tok == PLUS {
