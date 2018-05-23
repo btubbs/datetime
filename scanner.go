@@ -10,6 +10,7 @@ var eof = rune(0)
 
 type token int
 
+// Parsing tokens for internal use, only capitalized for stylistic reasons.
 const (
 	ILLEGAL token = iota
 	EOF

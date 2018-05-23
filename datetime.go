@@ -1,3 +1,8 @@
+// Package datetime provides a ParseTime function for turning commonly-used ISO 8601 date/time
+// formats into Golang time.Time variables.
+//
+// Unlike Go's built-in RFC-3339 time format, this package automatically supports ISO 8601 date and
+// time stamps with varying levels of granularity.  Examples:
 package datetime
 
 import (
