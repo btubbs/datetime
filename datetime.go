@@ -8,18 +8,19 @@ import (
 	"time"
 )
 
+// DateTime is just like a time.Time but serializes as an RFC3339Nano format when stringified or
+// marshaled to JSON.
 type DateTime time.Time
 
+// New creates a new DateTime.  It takes the same arguments as the std lib's time.Date function.
 func New(year int, month time.Month, day, hour, min, sec, nsec int, loc *time.Location) DateTime {
 	return DateTime(time.Date(year, month, day, hour, min, sec, nsec, loc))
 }
 
+// Parse takes a string and parses it into a DateTime.
 func Parse(input string) (DateTime, error) {
 	return parseBytes([]byte(input))
 }
-
-// TODO:
-// sql value and scan methods
 
 // String returns the DateTime's RFC3339Nano representation.
 func (d DateTime) String() string {
