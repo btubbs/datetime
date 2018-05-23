@@ -56,9 +56,11 @@ func (p *parser) parse(defaultLocation *time.Location) (time.Time, error) {
 	var hour, min, sec, nsec int
 	// parseDate has already checked that there's a T or EOF next, so those are the only cases we need
 	// to check here.
-	if tok, _ := p.scan(); tok == EOF {
+
+	switch tok, _ := p.scan(); tok {
+	case EOF:
 		return buildTime(year, month, day, hour, min, sec, nsec, location)
-	} else if tok == T {
+	case T:
 		hour, min, sec, nsec, err = p.parseTime()
 		if err != nil {
 			return zeroTime, err
@@ -81,50 +83,56 @@ func (p *parser) parse(defaultLocation *time.Location) (time.Time, error) {
 func (p *parser) parseLocation(defaultLocation *time.Location) (*time.Location, error) {
 	var sign, secs int
 	var name string
-	if tok, lit := p.scan(); tok == EOF {
+	switch tok, lit := p.scan(); tok {
+	case EOF:
 		return defaultLocation, nil
-	} else if tok == Z {
+	case Z:
 		return time.UTC, nil
-	} else if tok == PLUS {
+	case PLUS:
 		sign = 1
 		name += lit
-	} else if tok == DASH {
+	case DASH:
 		sign = -1
 		name += lit
-	} else {
+	default:
 		return nil, fmt.Errorf("expected Z, timezone offset, or EOF. got %s", lit)
 	}
 
-	if tok, lit := p.scan(); tok == NUMBER {
+	switch tok, lit := p.scan(); tok {
+	case NUMBER:
 		name += lit
-		litLen := len(lit)
-		if litLen == 4 {
+		switch len(lit) {
+		case 4:
 			hours := parseInt(lit[:2])
 			secs = hours * 60 * 60
 			minutes := parseInt(lit[2:4])
 			secs += minutes * 60
-		} else if litLen == 2 {
+		case 2:
 			hours := parseInt(lit)
 			secs = hours * 60 * 60
-		} else {
+		default:
 			return nil, fmt.Errorf("expected ±hh:mm, ±hhmm, or ±hh timezone offset format. got %s", lit)
 		}
-	} else {
+	default:
 		return nil, fmt.Errorf("expected number. got %s", lit)
 	}
 
-	if tok, lit := p.scan(); tok == EOF {
+	switch tok, lit := p.scan(); tok {
+	case EOF:
 		return time.FixedZone(name, sign*secs), nil
-	} else if tok != COLON {
-		return nil, fmt.Errorf("expected colon or EOF. got %s", lit)
+	default:
+		if tok != COLON {
+			return nil, fmt.Errorf("expected colon or EOF. got %s", lit)
+		}
 	}
 	name += ":"
 
-	if tok, lit := p.scan(); tok == NUMBER {
+	switch tok, lit := p.scan(); tok {
+	case NUMBER:
 		name += lit
 		minutes := parseInt(lit)
 		secs += minutes * 60
-	} else {
+	default:
 		return nil, fmt.Errorf("expected number. got %s", lit)
 	}
 
@@ -140,7 +148,8 @@ func (p *parser) parseTime() (int, int, int, int, error) {
 		return 0, 0, 0, 0, err
 	}
 
-	if tok, lit := p.scan(); tok == NUMBER {
+	switch tok, lit := p.scan(); tok {
+	case NUMBER:
 		// could be hh, hhmm, or hhmmss
 		switch len(lit) {
 		case 2:
@@ -158,32 +167,35 @@ func (p *parser) parseTime() (int, int, int, int, error) {
 		default:
 			return parseErr(fmt.Errorf("expected time. got %s", lit))
 		}
-	} else {
+	default:
 		return parseErr(fmt.Errorf("expected number. got %s", lit))
 	}
 
 	// get the min
 	if !minParsed {
-		if tok, lit := p.scan(); tok == EOF {
+		switch tok, lit := p.scan(); tok {
+		case EOF:
 			return hour, min, sec, nsec, nil
-		} else if tok == COLON {
+		case COLON:
 			min, err = p.scanNumber()
 			if err != nil {
 				return parseErr(err)
 			}
-		} else if beginsOffset(tok) {
-			p.unscan()
-			return hour, min, sec, nsec, nil
-		} else {
+		default:
+			if beginsOffset(tok) {
+				p.unscan()
+				return hour, min, sec, nsec, nil
+			}
 			return parseErr(fmt.Errorf("expected colon, EOF, or timezone offset. got %s", lit))
 		}
 	}
 
 	// get the sec
 	if !secParsed {
-		if tok, _ := p.scan(); tok == EOF {
+		switch tok, _ := p.scan(); tok {
+		case EOF:
 			return hour, min, sec, nsec, nil
-		} else if tok == COLON {
+		case COLON:
 			sec, err = p.scanNumber()
 			if err != nil {
 				return parseErr(err)
@@ -192,9 +204,10 @@ func (p *parser) parseTime() (int, int, int, int, error) {
 	}
 
 	// get the nsec
-	if tok, lit := p.scan(); tok == EOF {
+	switch tok, lit := p.scan(); tok {
+	case EOF:
 		return hour, min, sec, nsec, nil
-	} else if tok == DOT {
+	case DOT:
 		// can't use scanNumber on the fractional part because we need to preserve leading zeros.
 		tok, lit = p.scan()
 
@@ -204,7 +217,7 @@ func (p *parser) parseTime() (int, int, int, int, error) {
 
 		secFrac := parseDecimal(lit)
 		nsec = int(round(secFrac * nsecsPerSec))
-	} else {
+	default:
 		p.unscan()
 	}
 	return hour, min, sec, nsec, nil
@@ -226,32 +239,36 @@ func (p *parser) parseDate() (int, time.Month, int, error) {
 	}
 
 	// should start with a number like yyyy or yyyymmdd
-	if tok, lit := p.scan(); tok == NUMBER {
-		yrLen := len(lit)
-		if yrLen == 4 {
+	switch tok, lit := p.scan(); tok {
+	case NUMBER:
+		switch len(lit) {
+		case 4:
 			year = parseInt(lit)
-		} else if yrLen == 8 {
+		case 8:
 			// we should have yyyymmdd
 			year = parseInt(lit[:4])
 			monthNum := parseInt(lit[4:6])
 			month = time.Month(monthNum)
 			day = parseInt(lit[6:8])
 			return year, month, day, nil
-		} else {
+		default:
 			return unexpected(lit, "yyyy-mm-dd or yyyymmdd")
 		}
-	} else {
+	default:
 		return unexpected(lit, "number")
 	}
 
 	// if we're here, then we've got a year but not yet a month or day.  Dash or "T" is next.
-	if tok, lit := p.scan(); tok == T || tok == EOF {
+	switch tok, lit := p.scan(); tok {
+	case T, EOF:
 		if tok == T {
 			p.unscan()
 		}
 		return year, month, day, nil
-	} else if tok != DASH {
-		return unexpected(lit, "dash, T, or EOF")
+	default:
+		if tok != DASH {
+			return unexpected(lit, "dash, T, or EOF")
+		}
 	}
 
 	monthNum, err := p.scanNumber()
@@ -261,10 +278,13 @@ func (p *parser) parseDate() (int, time.Month, int, error) {
 	month = time.Month(monthNum)
 
 	// if we're here, then we've got a year and month but not yet a day.  Dash or "T" is next.
-	if tok, lit := p.scan(); tok == T || tok == EOF {
+	switch tok, lit := p.scan(); tok {
+	case T, EOF:
 		return year, month, day, nil
-	} else if tok != DASH {
-		return unexpected(lit, "dash, T, or EOF")
+	default:
+		if tok != DASH {
+			return unexpected(lit, "dash, T, or EOF")
+		}
 	}
 
 	day, err = p.scanNumber()
@@ -272,11 +292,12 @@ func (p *parser) parseDate() (int, time.Month, int, error) {
 		return parseErr(err)
 	}
 
-	if tok, lit := p.scan(); tok == T || tok == EOF {
+	switch tok, lit := p.scan(); tok {
+	case T, EOF:
 		if tok == T {
 			p.unscan()
 		}
-	} else {
+	default:
 		return unexpected(lit, "T or EOF")
 	}
 
