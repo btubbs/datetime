@@ -116,5 +116,5 @@ func jsonParse(data []byte, loc *time.Location) (time.Time, error) {
 	}
 	trimmed := data[1 : len(data)-1]
 
-	return parseBytes(trimmed, time.Local)
+	return parseBytes(trimmed, loc)
 }

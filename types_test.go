@@ -15,14 +15,24 @@ func newDefaultUTC(year int, month time.Month, day, hour, min, sec, nsec int, lo
 }
 
 func TestParse(t *testing.T) {
-	// a simple test, for a simple function
-	dt, err := ParseUTC("2007-11-11T17:38:12.000000001Z")
-	assert.Equal(t,
-		time.Date(2007, time.November, 11, 17, 38, 12, 1, time.UTC),
-		dt,
-	)
 
-	assert.Nil(t, err)
+	tt := []struct {
+		input  string
+		loc    *time.Location
+		output time.Time
+	}{
+		{
+			input:  "2007-11-11T17:38:12.000000001Z",
+			loc:    time.UTC,
+			output: time.Date(2007, time.November, 11, 17, 38, 12, 1, time.UTC),
+		},
+	}
+	for _, tc := range tt {
+		tyme, err := Parse(tc.input, tc.loc)
+		assert.Equal(t, tc.output, tyme)
+
+		assert.Nil(t, err)
+	}
 }
 
 func TestString(t *testing.T) {
