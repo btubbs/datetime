@@ -10,11 +10,15 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+func newDefaultUTC(year int, month time.Month, day, hour, min, sec, nsec int, loc *time.Location) DefaultUTC {
+	return DefaultUTC(time.Date(year, month, day, hour, min, sec, nsec, loc))
+}
+
 func TestParse(t *testing.T) {
 	// a simple test, for a simple function
-	dt, err := Parse("2007-11-11T17:38:12.000000001Z")
+	dt, err := ParseUTC("2007-11-11T17:38:12.000000001Z")
 	assert.Equal(t,
-		New(2007, time.November, 11, 17, 38, 12, 1, time.UTC),
+		time.Date(2007, time.November, 11, 17, 38, 12, 1, time.UTC),
 		dt,
 	)
 
@@ -23,15 +27,15 @@ func TestParse(t *testing.T) {
 
 func TestString(t *testing.T) {
 	tt := []struct {
-		dt     DateTime
+		dt     DefaultUTC
 		output string
 	}{
 		{
-			dt:     New(2007, time.November, 11, 17, 38, 12, 432000000, time.UTC),
+			dt:     newDefaultUTC(2007, time.November, 11, 17, 38, 12, 432000000, time.UTC),
 			output: "2007-11-11T17:38:12.432Z",
 		},
 		{
-			dt:     New(2007, time.November, 11, 17, 38, 12, 1, time.UTC),
+			dt:     newDefaultUTC(2007, time.November, 11, 17, 38, 12, 1, time.UTC),
 			output: "2007-11-11T17:38:12.000000001Z",
 		},
 	}
@@ -44,16 +48,16 @@ func TestString(t *testing.T) {
 func TestUnmarshal(t *testing.T) {
 	tt := []struct {
 		input []byte
-		dt    DateTime
+		dt    DefaultUTC
 		err   error
 	}{
 		{
 			input: []byte(`"2007-11-11T17:38:12.432Z"`),
-			dt:    New(2007, time.November, 11, 17, 38, 12, 432000000, time.UTC),
+			dt:    newDefaultUTC(2007, time.November, 11, 17, 38, 12, 432000000, time.UTC),
 		},
 		{
 			input: []byte(`"2007-11-11T17:38:12.000000001Z"`),
-			dt:    New(2007, time.November, 11, 17, 38, 12, 1, time.UTC),
+			dt:    newDefaultUTC(2007, time.November, 11, 17, 38, 12, 1, time.UTC),
 		},
 		{
 			input: []byte(`2007`),
@@ -66,7 +70,7 @@ func TestUnmarshal(t *testing.T) {
 	}
 
 	for _, tc := range tt {
-		var dt DateTime
+		var dt DefaultUTC
 		err := json.Unmarshal(tc.input, &dt)
 		assert.Equal(t, tc.err, err)
 		assert.Equal(t, tc.dt, dt)
@@ -76,12 +80,12 @@ func TestUnmarshal(t *testing.T) {
 func TestScan(t *testing.T) {
 	tt := []struct {
 		input interface{}
-		dt    DateTime
+		dt    DefaultUTC
 		err   error
 	}{
 		{
 			input: []byte("2007-11-11T17:38:12.432Z"),
-			dt:    New(2007, time.November, 11, 17, 38, 12, 432000000, time.UTC),
+			dt:    newDefaultUTC(2007, time.November, 11, 17, 38, 12, 432000000, time.UTC),
 		},
 		{
 			input: []byte("invalid"),
@@ -89,7 +93,7 @@ func TestScan(t *testing.T) {
 		},
 		{
 			input: "2007-11-11T17:38:12.000000001Z",
-			dt:    New(2007, time.November, 11, 17, 38, 12, 1, time.UTC),
+			dt:    newDefaultUTC(2007, time.November, 11, 17, 38, 12, 1, time.UTC),
 		},
 		{
 			input: "invalid",
@@ -102,7 +106,7 @@ func TestScan(t *testing.T) {
 	}
 
 	for _, tc := range tt {
-		var dt DateTime
+		var dt DefaultUTC
 		err := dt.Scan(tc.input)
 		assert.Equal(t, tc.err, err)
 		assert.Equal(t, tc.dt, dt)
@@ -111,15 +115,15 @@ func TestScan(t *testing.T) {
 
 func TestValue(t *testing.T) {
 	tt := []struct {
-		dt     DateTime
+		dt     DefaultUTC
 		output driver.Value
 	}{
 		{
-			dt:     New(2007, time.November, 11, 17, 38, 12, 432000000, time.UTC),
+			dt:     newDefaultUTC(2007, time.November, 11, 17, 38, 12, 432000000, time.UTC),
 			output: "2007-11-11T17:38:12.432Z",
 		},
 		{
-			dt:     New(2007, time.November, 11, 17, 38, 12, 1, time.UTC),
+			dt:     newDefaultUTC(2007, time.November, 11, 17, 38, 12, 1, time.UTC),
 			output: "2007-11-11T17:38:12.000000001Z",
 		},
 	}

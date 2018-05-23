@@ -10,110 +10,110 @@ import (
 
 func TestValidFormats(t *testing.T) {
 	tt := []struct {
-		input  string
-		output time.Time
+		input       string
+		localOutput time.Time
 	}{
 		{
-			input:  "2007",
-			output: time.Date(2007, time.January, 1, 0, 0, 0, 0, time.Local),
+			input:       "2007",
+			localOutput: time.Date(2007, time.January, 1, 0, 0, 0, 0, time.Local),
 		},
 		{
-			input:  "2007-11",
-			output: time.Date(2007, time.November, 1, 0, 0, 0, 0, time.Local),
+			input:       "2007-11",
+			localOutput: time.Date(2007, time.November, 1, 0, 0, 0, 0, time.Local),
 		},
 		{
-			input:  "20071130",
-			output: time.Date(2007, time.November, 30, 0, 0, 0, 0, time.Local),
+			input:       "20071130",
+			localOutput: time.Date(2007, time.November, 30, 0, 0, 0, 0, time.Local),
 		},
 		{
-			input:  "2007-11-30",
-			output: time.Date(2007, time.November, 30, 0, 0, 0, 0, time.Local),
+			input:       "2007-11-30",
+			localOutput: time.Date(2007, time.November, 30, 0, 0, 0, 0, time.Local),
 		},
 		{
-			input:  "2007-11-30T10",
-			output: time.Date(2007, time.November, 30, 10, 0, 0, 0, time.Local),
+			input:       "2007-11-30T10",
+			localOutput: time.Date(2007, time.November, 30, 10, 0, 0, 0, time.Local),
 		},
 		{
-			input:  "20071130T10",
-			output: time.Date(2007, time.November, 30, 10, 0, 0, 0, time.Local),
+			input:       "20071130T10",
+			localOutput: time.Date(2007, time.November, 30, 10, 0, 0, 0, time.Local),
 		},
 		{
-			input:  "20071130T1010",
-			output: time.Date(2007, time.November, 30, 10, 10, 0, 0, time.Local),
+			input:       "20071130T1010",
+			localOutput: time.Date(2007, time.November, 30, 10, 10, 0, 0, time.Local),
 		},
 		{
-			input:  "20071130T101010",
-			output: time.Date(2007, time.November, 30, 10, 10, 10, 0, time.Local),
+			input:       "20071130T101010",
+			localOutput: time.Date(2007, time.November, 30, 10, 10, 10, 0, time.Local),
 		},
 		{
-			input:  "20071130T101010.123",
-			output: time.Date(2007, time.November, 30, 10, 10, 10, 123000000, time.Local),
+			input:       "20071130T101010.123",
+			localOutput: time.Date(2007, time.November, 30, 10, 10, 10, 123000000, time.Local),
 		},
 		{
-			input:  "2007-11-30T10:10",
-			output: time.Date(2007, time.November, 30, 10, 10, 0, 0, time.Local),
+			input:       "2007-11-30T10:10",
+			localOutput: time.Date(2007, time.November, 30, 10, 10, 0, 0, time.Local),
 		},
 		{
-			input:  "2007-11-30T10:10:10",
-			output: time.Date(2007, time.November, 30, 10, 10, 10, 0, time.Local),
+			input:       "2007-11-30T10:10:10",
+			localOutput: time.Date(2007, time.November, 30, 10, 10, 10, 0, time.Local),
 		},
 		{
-			input:  "2007-11-30T10:10:10.123",
-			output: time.Date(2007, time.November, 30, 10, 10, 10, 123000000, time.Local),
+			input:       "2007-11-30T10:10:10.123",
+			localOutput: time.Date(2007, time.November, 30, 10, 10, 10, 123000000, time.Local),
 		},
 		{
-			input:  "2007-11-30T10:10:10.000000001",
-			output: time.Date(2007, time.November, 30, 10, 10, 10, 1, time.Local),
+			input:       "2007-11-30T10:10:10.000000001",
+			localOutput: time.Date(2007, time.November, 30, 10, 10, 10, 1, time.Local),
 		},
 		{
-			input:  "2007-11-30T10:10:10.123Z",
-			output: time.Date(2007, time.November, 30, 10, 10, 10, 123000000, time.UTC),
+			input:       "2007-11-30T10:10:10.123Z",
+			localOutput: time.Date(2007, time.November, 30, 10, 10, 10, 123000000, time.UTC),
 		},
 		{
-			input:  "20071130T10:10:10.123Z",
-			output: time.Date(2007, time.November, 30, 10, 10, 10, 123000000, time.UTC),
+			input:       "20071130T10:10:10.123Z",
+			localOutput: time.Date(2007, time.November, 30, 10, 10, 10, 123000000, time.UTC),
 		},
 		{
-			input:  "20071130T10:10:10.0123Z",
-			output: time.Date(2007, time.November, 30, 10, 10, 10, 12300000, time.UTC),
+			input:       "20071130T10:10:10.0123Z",
+			localOutput: time.Date(2007, time.November, 30, 10, 10, 10, 12300000, time.UTC),
 		},
 		{
-			input:  "2007-11-30T10:10:10Z",
-			output: time.Date(2007, time.November, 30, 10, 10, 10, 0, time.UTC),
+			input:       "2007-11-30T10:10:10Z",
+			localOutput: time.Date(2007, time.November, 30, 10, 10, 10, 0, time.UTC),
 		},
 		{
-			input:  "2007-11-30T10:10:10+02",
-			output: time.Date(2007, time.November, 30, 10, 10, 10, 0, time.FixedZone("+02", 60*60*2)),
+			input:       "2007-11-30T10:10:10+02",
+			localOutput: time.Date(2007, time.November, 30, 10, 10, 10, 0, time.FixedZone("+02", 60*60*2)),
 		},
 		{
-			input:  "2007-11-30T10:10:10-02",
-			output: time.Date(2007, time.November, 30, 10, 10, 10, 0, time.FixedZone("-02", 60*60*-2)),
+			input:       "2007-11-30T10:10:10-02",
+			localOutput: time.Date(2007, time.November, 30, 10, 10, 10, 0, time.FixedZone("-02", 60*60*-2)),
 		},
 		{
-			input:  "2007-11-30T10:10:10+0230",
-			output: time.Date(2007, time.November, 30, 10, 10, 10, 0, time.FixedZone("+0230", (60*60*2)+(30*60))),
+			input:       "2007-11-30T10:10:10+0230",
+			localOutput: time.Date(2007, time.November, 30, 10, 10, 10, 0, time.FixedZone("+0230", (60*60*2)+(30*60))),
 		},
 		{
-			input:  "2007-11-30T10:10:10+02:30",
-			output: time.Date(2007, time.November, 30, 10, 10, 10, 0, time.FixedZone("+02:30", (60*60*2)+(30*60))),
+			input:       "2007-11-30T10:10:10+02:30",
+			localOutput: time.Date(2007, time.November, 30, 10, 10, 10, 0, time.FixedZone("+02:30", (60*60*2)+(30*60))),
 		},
 		{
-			input:  "2007-11-30T10:10:10+00:00",
-			output: time.Date(2007, time.November, 30, 10, 10, 10, 0, time.FixedZone("+00:00", 0)),
+			input:       "2007-11-30T10:10:10+00:00",
+			localOutput: time.Date(2007, time.November, 30, 10, 10, 10, 0, time.FixedZone("+00:00", 0)),
 		},
 		{
-			input:  "2007-11-30T10Z",
-			output: time.Date(2007, time.November, 30, 10, 0, 0, 0, time.UTC),
+			input:       "2007-11-30T10Z",
+			localOutput: time.Date(2007, time.November, 30, 10, 0, 0, 0, time.UTC),
 		},
 		{
-			input:  "2007T10",
-			output: time.Date(2007, time.January, 1, 10, 0, 0, 0, time.Local),
+			input:       "2007T10",
+			localOutput: time.Date(2007, time.January, 1, 10, 0, 0, 0, time.Local),
 		},
 	}
 
 	for _, tc := range tt {
-		when, err := ParseTime(tc.input)
-		assert.Equal(t, tc.output, when, tc.input)
+		local, err := ParseLocal(tc.input)
+		assert.Equal(t, tc.localOutput, local, tc.input)
 		assert.Nil(t, err, tc.input)
 	}
 }
@@ -226,7 +226,7 @@ func TestErrors(t *testing.T) {
 	}
 
 	for _, tc := range tt {
-		when, err := ParseTime(tc.input)
+		when, err := ParseLocal(tc.input)
 		assert.Equal(t, zeroTime, when, tc.input)
 		assert.Equal(t, errors.New(tc.err), err, tc.input)
 	}
