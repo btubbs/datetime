@@ -1,13 +1,3 @@
-# datetime [![Build Status](https://travis-ci.org/btubbs/datetime.svg?branch=master)](https://travis-ci.org/btubbs/datetime) [![Coverage Status](https://coveralls.io/repos/github/btubbs/datetime/badge.svg?branch=master)](https://coveralls.io/github/btubbs/datetime?branch=master)
-
-`datetime` provides a Parse function for turning commonly-used 
-[ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) date/time formats into
-Golang time.Time variables. 
-
-Unlike Go's built-in RFC-3339 time format, this package automatically supports ISO 8601 date and
-time stamps with varying levels of granularity.  Examples:
-
-```go
 package main
 
 import (
@@ -29,6 +19,9 @@ func main() {
 	// adding time
 	fmt.Println(datetime.ParseTime("2007-11-22T12:30:22")) // 2007-11-22 12:30:22 -0700 MST <nil>
 
+	// fractions of a second
+	fmt.Println(datetime.ParseTime("2007-11-22T12:30:22.321")) // 2007-11-22 12:30:22.321 -0700 MST <nil>
+
 	// omitting dashes and colons, as ISO 8601 allows
 	fmt.Println(datetime.ParseTime("20071122T123022")) // 2007-11-22 12:30:22 -0700 MST <nil>
 
@@ -41,14 +34,3 @@ func main() {
 	// using a shorthand for UTC
 	fmt.Println(datetime.ParseTime("2007-11-22T12:30:22Z")) // 2007-11-22 12:30:22 +0000 UTC <nil>
 }
-
-```
-
-TODO:
-- DateTime struct
-  - unmarshal
-  - scan
-  - value
-- package docstring
-- Parse method
-- back to 100% test coverage
