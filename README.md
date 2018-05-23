@@ -44,11 +44,5 @@ func main() {
 
 ```
 
-TODO:
-- DateTime struct
-  - unmarshal
-  - scan
-  - value
-- package docstring
-- Parse method
-- back to 100% test coverage
+A `DateTime` type is also provided, which implements Scan, Value, and UnmarshalJSON methods for easy
+de/serialization of ISO 8601 timestamps with external systems.
