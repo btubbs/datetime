@@ -2,7 +2,10 @@
 
 `datetime` provides a Parse function for turning commonly-used 
 [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) date/time formats into
-Golang time.Time variables. 
+Golang time.Time variables.  `datetime.Parse` takes two arguments:
+
+- the string you want to parse
+- the timezone location to be used if there's not one specified inside the string
 
 Unlike Go's built-in RFC-3339 time format, this package automatically supports ISO 8601 date and
 time stamps with varying levels of granularity.  Examples:
