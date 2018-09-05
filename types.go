@@ -27,7 +27,7 @@ func (d DefaultUTC) String() string {
 // UnmarshalJSON implements the JSON Unmarshaler interface, allowing datetime.DefaultUTC struct fields
 // to be read from JSON string fields.
 func (d *DefaultUTC) UnmarshalJSON(data []byte) error {
-	t, err := jsonParse(data, time.UTC)
+	t, err := JSONParse(data, time.UTC)
 	*d = DefaultUTC(t)
 	return err
 }
@@ -60,7 +60,7 @@ func (d DefaultLocal) String() string {
 // UnmarshalJSON implements the JSON Unmarshaler interface, allowing datetime.DefaultLocal struct fields
 // to be read from JSON string fields.
 func (d *DefaultLocal) UnmarshalJSON(data []byte) error {
-	t, err := jsonParse(data, time.Local)
+	t, err := JSONParse(data, time.Local)
 	*d = DefaultLocal(t)
 	return err
 }
@@ -106,7 +106,8 @@ func sqlScan(value interface{}, loc *time.Location) (time.Time, error) {
 
 const doubleQuote byte = 34
 
-func jsonParse(data []byte, loc *time.Location) (time.Time, error) {
+// JSONParse will take a JSON bytes value with quotes around it, and parse it into a time.Time.
+func JSONParse(data []byte, loc *time.Location) (time.Time, error) {
 	// Ignore null, like in the main JSON package.
 	if string(data) == "null" {
 		return zeroTime, nil
