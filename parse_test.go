@@ -22,6 +22,10 @@ func TestValidFormats(t *testing.T) {
 			localOutput: time.Date(2007, time.November, 1, 0, 0, 0, 0, time.Local),
 		},
 		{
+			input:       "200711",
+			localOutput: time.Date(2007, time.November, 1, 0, 0, 0, 0, time.Local),
+		},
+		{
 			input:       "20071130",
 			localOutput: time.Date(2007, time.November, 30, 0, 0, 0, 0, time.Local),
 		},
