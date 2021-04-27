@@ -1,7 +1,7 @@
 # datetime [![Build Status](https://travis-ci.org/btubbs/datetime.svg?branch=master)](https://travis-ci.org/btubbs/datetime) [![Coverage Status](https://coveralls.io/repos/github/btubbs/datetime/badge.svg?branch=master)](https://coveralls.io/github/btubbs/datetime?branch=master)
 
 `datetime` provides a Parse function for turning commonly-used 
-[ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) date/time formats into
+[ISO 8601](http://www.loc.gov/standards/datetime/iso-tc154-wg5_n0038_iso_wd_8601-1_2016-02-16.pdf) date/time formats into
 Golang time.Time variables.  `datetime.Parse` takes two arguments:
 
 - the string you want to parse
