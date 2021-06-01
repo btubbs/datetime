@@ -1,3 +1,7 @@
+# THIS REPO HAS MOVED
+
+See the new home at https://github.com/nav-inc/datetime
+
 # datetime [![Build Status](https://travis-ci.org/nav-inc/datetime.svg?branch=master)](https://travis-ci.org/nav-inc/datetime) 
 
 `datetime` provides a Parse function for turning commonly-used 
