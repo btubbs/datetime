@@ -1,4 +1,4 @@
 sudo: false
 language: go
 script:
-  - go test .
+  - go test . -cover
