@@ -204,7 +204,8 @@ func (p *parser) parseTime() (int, int, int, int, error) {
 	}
 
 	// get the nsec
-	switch tok, lit := p.scan(); tok {
+	var lit string // make this one look slightly different to satisfy ineffassign check.
+	switch tok, _ := p.scan(); tok {
 	case EOF:
 		return hour, min, sec, nsec, nil
 	case DOT:
